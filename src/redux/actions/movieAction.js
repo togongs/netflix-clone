@@ -115,7 +115,6 @@ function pagination(page, size) {
 }
 
 function search(searchQuery) {
-  console.log("searchQuery???", searchQuery);
   return async (dispatch) => {
     const searchApi = await api.get(
       `/search/movie?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&query=${searchQuery}&include_adult=false`

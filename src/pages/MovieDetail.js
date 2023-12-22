@@ -62,7 +62,7 @@ const MovieDetail = () => {
         <div className={styles.rateContainer}>
           <FaStar className={styles.rate} />{" "}
           <span className={styles.text}>
-            {selectedMovie?.vote_average.toFixed(1)}
+            {selectedMovie?.vote_average?.toFixed(1)}
           </span>
         </div>
         <p className={styles.overview}>{selectedMovie?.overview}</p>
@@ -93,7 +93,7 @@ const MovieDetail = () => {
       <Tabs defaultActiveKey="home" transition={false}>
         <Tab eventKey="home" title="REVIEWS">
           {reviews?.results?.map((item) => (
-            <div className={styles.review}>
+            <div key={item.id} className={styles.review}>
               <div>{item.author}</div>
               <div>{item.content}</div>
             </div>
@@ -103,6 +103,7 @@ const MovieDetail = () => {
           <div className={styles.recommendContainer}>
             {recommend?.results?.map((item) => (
               <div
+                key={item.id}
                 style={{
                   backgroundImage:
                     "url(" +
@@ -128,7 +129,7 @@ const MovieDetail = () => {
                 <div className={styles.rateContainer}>
                   <FaStar className={styles.rate} />{" "}
                   <span className={styles.text}>
-                    {item.vote_average.toFixed(1)}
+                    {item.vote_average?.toFixed(1)}
                   </span>
                 </div>
                 <p className={styles.adult}>{item.adult ? "18" : "Under 18"}</p>

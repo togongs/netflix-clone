@@ -104,8 +104,7 @@ export const Trailer = createAsyncThunk(
 export const pagination = createAsyncThunk(
   "movie/pagination",
   async (data, thunkAPI) => {
-    const { page, size, type } = data;
-    console.log("type", type);
+    const { page, size } = data;
     try {
       const popularMovieApi = await api.get(
         `/movie/popular?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&page=${page}&size=${size}`
@@ -120,10 +119,10 @@ export const pagination = createAsyncThunk(
 export const search = createAsyncThunk(
   "movie/search",
   async (data, thunkAPI) => {
-    const { searchQuery } = data;
+    const { page, size, searchQuery } = data;
     try {
       const searchApi = await api.get(
-        `/search/movie?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&query=${searchQuery}&include_adult=false`
+        `/search/movie?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&query=${searchQuery}&page=${page}&size=${size}&include_adult=false`
       );
       return thunkAPI.fulfillWithValue(searchApi);
     } catch (error) {
