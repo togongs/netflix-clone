@@ -2,13 +2,15 @@ import React from "react";
 import { Badge } from "react-bootstrap";
 import { useSelector } from "react-redux/es/exports";
 import { useNavigate } from "react-router-dom";
+import { FaStar } from "react-icons/fa6";
+import styles from "./MovieCard.module.scss";
 
 const MovieCard = (item) => {
   const navigate = useNavigate();
   const { genreList } = useSelector((state) => state.movie);
   return (
     <div
-      className="card"
+      className={styles.card}
       style={{
         backgroundImage:
           "url(" +
@@ -23,19 +25,20 @@ const MovieCard = (item) => {
         navigate(`/movies/${item.id}`);
       }}
     >
-      <div className="overlay">
+      <div className={styles.overlay}>
         <h5>{item.title}</h5>
-        <div style={{ margin: "8px 0" }}>
+        <div className={styles.badgeContainer}>
           {item.genre_ids.map((id) => (
-            <Badge bg="danger" key={id} style={{ marginRight: 8 }}>
+            <Badge className={styles.badge} bg="danger" key={id}>
               {genreList.find((item) => item.id === id)?.name}
             </Badge>
           ))}
         </div>
-        <div>
-          <span>{item.vote_average}</span>
-          <p>{item.adult ? "18" : "Under 18"}</p>
+        <div className={styles.rateContainer}>
+          <FaStar className={styles.rate} />{" "}
+          <span className={styles.text}>{item.vote_average.toFixed(1)}</span>
         </div>
+        <p className={styles.adult}>{item.adult ? "18" : "Under 18"}</p>
       </div>
     </div>
   );

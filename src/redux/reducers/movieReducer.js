@@ -104,7 +104,8 @@ export const Trailer = createAsyncThunk(
 export const pagination = createAsyncThunk(
   "movie/pagination",
   async (data, thunkAPI) => {
-    const { page, size } = data;
+    const { page, size, type } = data;
+    console.log("type", type);
     try {
       const popularMovieApi = await api.get(
         `/movie/popular?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&page=${page}&size=${size}`

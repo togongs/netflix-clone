@@ -1,9 +1,10 @@
 import React from "react";
+import styles from "./Banner.module.scss";
 
 const Banner = ({ movie }) => {
   return (
     <div
-      className="banner"
+      className={styles.container}
       style={{
         backgroundImage:
           "url(" +
@@ -13,7 +14,7 @@ const Banner = ({ movie }) => {
         backgroundPosition: "center center",
       }}
     >
-      <div className="banner-info">
+      <div className={styles.info}>
         <h1>{movie.title}</h1>
         <p>{movie.overview}</p>
       </div>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Badge, Col, Container, Row, Dropdown } from "react-bootstrap";
+import { Col, Container, Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { movieAction } from "../redux/actions/movieAction";
@@ -8,7 +8,9 @@ import MovieList from "../components/MovieList";
 import { pagination, search, getMovies } from "../redux/reducers/movieReducer";
 
 const Movies = () => {
-  const { searchMovies, genreList } = useSelector((state) => state.movie);
+  const { popularMovies, genreList, searchMovies } = useSelector(
+    (state) => state.movie
+  );
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [page, setPage] = useState(1);
@@ -25,9 +27,21 @@ const Movies = () => {
   };
 
   useEffect(() => {
-    setSize(searchMovies?.total_pages);
-    dispatch(pagination({ page, size }));
-  }, [dispatch, page, searchMovies?.total_pages, size]);
+    if (searchMovies.results) {
+      setSize(searchMovies?.total_pages);
+      dispatch(pagination({ type: "search", page, size }));
+    } else {
+      setSize(popularMovies?.total_pages);
+      dispatch(pagination({ type: "popular", page, size }));
+    }
+  }, [
+    dispatch,
+    page,
+    popularMovies?.total_pages,
+    searchMovies.results,
+    searchMovies?.total_pages,
+    size,
+  ]);
 
   useEffect(() => {
     if (searchQuery !== "") {
@@ -47,7 +61,7 @@ const Movies = () => {
     let { min, max } = value;
     let maxNum = max.toString();
     let minNum = min.toString();
-    let data = [...searchMovies.results.map((item) => item.release_date)];
+    let data = [...popularMovies.results.map((item) => item.release_date)];
     const list = data.filter((item) => minNum < item < maxNum);
     // list.map((item) => item.release_date);
     // list.filter(value=>value);
@@ -109,7 +123,7 @@ const Movies = () => {
         <Pagination
           activePage={page} // 현재페이지
           itemsCountPerPage={10} // 한 페이지당 보여줄 아이템 개수
-          totalItemsCount={size ?? 0} // 총 아이템 갯수
+          totalItemsCount={size} // 총 아이템 갯수
           pageRangeDisplayed={5} // paginator 보여줄 범위
           prevPageText={"‹"}
           nextPageText={"›"}

@@ -1,6 +1,8 @@
+/* eslint-disable jsx-a11y/img-redundant-alt */
 import React, { useState } from "react";
 import { Container, Form, Navbar, Nav, Button } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
+import styles from "./Navigation.module.scss";
 
 const Navigation = () => {
   const [search, setSearch] = useState("");
@@ -10,9 +12,10 @@ const Navigation = () => {
       <Container fluid>
         <Navbar.Brand href="#">
           <img
+            className={styles.image}
             width={100}
             src="https://content.surfit.io/thumbs/image/wJW2K/w4VbJ/10552564055eb8333117a06.png/cover-center-2x.webp"
-            alt=""
+            alt="image"
           />
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="navbarScroll" />
@@ -22,10 +25,10 @@ const Navigation = () => {
             style={{ maxHeight: "100px" }}
             navbarScroll
           >
-            <Link to="/" className="nav-item">
+            <Link to="/" className={styles.link}>
               Home
             </Link>
-            <Link to="/movies" className="nav-item">
+            <Link to="/movies" className={styles.link}>
               Movies
             </Link>
           </Nav>
