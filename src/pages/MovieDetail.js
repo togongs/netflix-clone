@@ -107,7 +107,7 @@ const MovieDetail = () => {
         </Tab>
         <Tab eventKey="profile" title="RELATED MOVIES">
           <div className={styles.recommendContainer}>
-            {recommend?.results.length > 0 ? (
+            {recommend?.results?.length > 0 ? (
               recommend.results?.map((item) => (
                 <div
                   key={item.id}
