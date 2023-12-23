@@ -6,8 +6,6 @@ import Movies from "./pages/Movies";
 import MovieDetail from "./pages/MovieDetail";
 import Navigation from "./components/Navigation";
 
-// 1. nav바
-
 function App() {
   return (
     <div>

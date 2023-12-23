@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 // import { movieAction } from "../redux/actions/movieAction";
 import ClipLoader from "react-spinners/ClipLoader";
 import { Tabs, Tab, Badge, Button, Modal } from "react-bootstrap";
@@ -15,19 +15,7 @@ const MovieDetail = () => {
     useSelector((state) => state.movie);
   const { id } = useParams();
   const [show, setShow] = useState(false);
-
-  const handleShow = () => {
-    setShow(true);
-  };
-
-  const opts = {
-    height: "390",
-    width: "640",
-    playerVars: {
-      // https://developers.google.com/youtube/player_parameters
-      autoplay: 1,
-    },
-  };
+  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(detailMovie(id));
@@ -35,7 +23,11 @@ const MovieDetail = () => {
   }, [dispatch, id]);
 
   if (loading) {
-    return <ClipLoader color="#fff" loading={loading} size={150} />;
+    return (
+      <div id="loader">
+        <ClipLoader color="#fff" loading={loading} size={150} />
+      </div>
+    );
   }
 
   return (
@@ -68,20 +60,34 @@ const MovieDetail = () => {
         <p className={styles.overview}>{selectedMovie?.overview}</p>
         <p className={styles.date}>{selectedMovie?.release_date}</p>
       </div>
-      <Button className={styles.button} variant="danger" onClick={handleShow}>
+      <Button
+        className={styles.button}
+        variant="danger"
+        onClick={() => setShow(true)}
+      >
         Watch trailer
       </Button>
       <Modal
         show={show}
         onHide={() => setShow(false)}
         animation={false}
+        centered
         size="xl"
       >
         <Modal.Body>
           {selectedMovie?.id === trailer?.id && (
             <YouTube
-              videoId={trailer?.results?.key}
-              opts={opts}
+              className={styles.youtube}
+              videoId={trailer?.results?.[0].key}
+              opts={{
+                height: "390",
+                width: "640",
+                playerVars: {
+                  autoplay: 1,
+                  rel: 0,
+                  modestbranding: 1,
+                },
+              }}
               onEnd={(e) => {
                 e.target.stopVideo(0);
               }}
@@ -94,47 +100,55 @@ const MovieDetail = () => {
         <Tab eventKey="home" title="REVIEWS">
           {reviews?.results?.map((item) => (
             <div key={item.id} className={styles.review}>
-              <div>{item.author}</div>
+              <h5>{item.author}</h5>
               <div>{item.content}</div>
             </div>
           ))}
         </Tab>
         <Tab eventKey="profile" title="RELATED MOVIES">
           <div className={styles.recommendContainer}>
-            {recommend?.results?.map((item) => (
-              <div
-                key={item.id}
-                style={{
-                  backgroundImage:
-                    "url(" +
-                    `https://www.themoviedb.org/t/p/w300_and_h450_bestv2${item.poster_path}` +
-                    ")",
-                  width: "40%",
-                  height: "300px",
-                  backgroundSize: "cover",
-                  backgroundRepeat: "no-repeat",
-                  padding: 10,
-                  borderRadius: 8,
-                  marginTop: 15,
-                }}
-              >
-                <h5>{item.title}</h5>
-                <div className={styles.badgeContainer}>
-                  {item.genre_ids.map((id) => (
-                    <Badge className={styles.badge} bg="danger" key={id}>
-                      {genreList.find((item) => item.id === id)?.name}
-                    </Badge>
-                  ))}
+            {recommend?.results.length > 0 ? (
+              recommend.results?.map((item) => (
+                <div
+                  key={item.id}
+                  style={{
+                    backgroundImage:
+                      "url(" +
+                      `https://www.themoviedb.org/t/p/w300_and_h450_bestv2${item.poster_path}` +
+                      ")",
+                    width: "45%",
+                    height: "300px",
+                    backgroundSize: "cover",
+                    backgroundRepeat: "no-repeat",
+                    padding: 10,
+                    borderRadius: 8,
+                    marginTop: 15,
+                    cursor: "pointer",
+                  }}
+                  onClick={() => navigate(`/movies/${item.id}`)}
+                >
+                  <h5>{item.title}</h5>
+                  <div className={styles.badgeContainer}>
+                    {item.genre_ids.map((id) => (
+                      <Badge className={styles.badge} bg="danger" key={id}>
+                        {genreList.find((item) => item.id === id)?.name}
+                      </Badge>
+                    ))}
+                  </div>
+                  <div className={styles.rateContainer}>
+                    <FaStar className={styles.rate} />{" "}
+                    <span className={styles.text}>
+                      {item.vote_average?.toFixed(1)}
+                    </span>
+                  </div>
+                  <p className={styles.adult}>
+                    {item.adult ? "18" : "Under 18"}
+                  </p>
                 </div>
-                <div className={styles.rateContainer}>
-                  <FaStar className={styles.rate} />{" "}
-                  <span className={styles.text}>
-                    {item.vote_average?.toFixed(1)}
-                  </span>
-                </div>
-                <p className={styles.adult}>{item.adult ? "18" : "Under 18"}</p>
-              </div>
-            ))}
+              ))
+            ) : (
+              <p className={styles.empty}>There are no reviews</p>
+            )}
           </div>
         </Tab>
       </Tabs>

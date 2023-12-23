@@ -2,6 +2,7 @@ import React from "react";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import MovieCard from "./MovieCard";
+import styles from "./MovieSlide.module.scss";
 
 const MovieSlide = ({ movies }) => {
   const responsive = {
@@ -28,7 +29,7 @@ const MovieSlide = ({ movies }) => {
   };
 
   return (
-    <div>
+    <div className={styles.container}>
       <Carousel
         swipeable={false}
         draggable={false}
@@ -44,8 +45,8 @@ const MovieSlide = ({ movies }) => {
         // dotListClass="custom-dot-list-style"
         // itemClass="carousel-item-padding-40-px"
       >
-        {movies.results.map((item) => (
-          <MovieCard {...item} />
+        {movies.results?.map((item, index) => (
+          <MovieCard {...item} key={index} />
         ))}
       </Carousel>
     </div>

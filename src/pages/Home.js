@@ -18,7 +18,11 @@ const Home = () => {
   }, [dispatch]);
 
   if (loading) {
-    return <ClipLoader color="#fff" loading={loading} size={150} />;
+    return (
+      <div id="loader">
+        <ClipLoader color="#fff" loading={loading} size={150} />
+      </div>
+    );
   }
   return (
     <div className={styles.container}>
