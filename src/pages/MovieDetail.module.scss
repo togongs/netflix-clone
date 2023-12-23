@@ -59,6 +59,7 @@
     display: flex;
     flex-wrap: wrap;
     gap: 25px;
+    margin-bottom: 20px;
     .badgeContainer {
       margin: 8px 0;
       .badge {
@@ -82,10 +83,10 @@
       font-size: 14px;
       font-weight: 600;
     }
-    .empty {
-      padding: 20px;
-    }
   }
+}
+.empty {
+  padding: 20px;
 }
 
 :global {

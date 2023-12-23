@@ -98,12 +98,16 @@ const MovieDetail = () => {
 
       <Tabs defaultActiveKey="home" transition={false}>
         <Tab eventKey="home" title="REVIEWS">
-          {reviews?.results?.map((item) => (
-            <div key={item.id} className={styles.review}>
-              <h5>{item.author}</h5>
-              <div>{item.content}</div>
-            </div>
-          ))}
+          {reviews?.results?.length > 0 ? (
+            reviews.results?.map((item) => (
+              <div key={item.id} className={styles.review}>
+                <h5>{item.author}</h5>
+                <div>{item.content}</div>
+              </div>
+            ))
+          ) : (
+            <p className={styles.empty}>There are no reviews</p>
+          )}
         </Tab>
         <Tab eventKey="profile" title="RELATED MOVIES">
           <div className={styles.recommendContainer}>
@@ -147,7 +151,7 @@ const MovieDetail = () => {
                 </div>
               ))
             ) : (
-              <p className={styles.empty}>There are no reviews</p>
+              <p className={styles.empty}>There are no related movies</p>
             )}
           </div>
         </Tab>

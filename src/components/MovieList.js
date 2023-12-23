@@ -23,9 +23,20 @@ const MovieList = ({ sort }) => {
     if (searchQuery !== "") {
       dispatch(search({ page, size, searchQuery }));
     }
+    if (searchQuery !== "" && searchMovies?.results?.length === 0) {
+      setSize(0);
+      return;
+    }
     setSize(popularMovies?.total_pages);
     dispatch(pagination({ page, size }));
-  }, [dispatch, page, popularMovies?.total_pages, searchQuery, size]);
+  }, [
+    dispatch,
+    page,
+    popularMovies?.total_pages,
+    searchMovies?.results?.length,
+    searchQuery,
+    size,
+  ]);
   return (
     <>
       {searchQuery === null || searchQuery === ""
@@ -174,15 +185,21 @@ const MovieList = ({ sort }) => {
               <p className={styles.adult}>{item.adult ? "18" : "Under 18"}</p>
             </div>
           ))}
-      <Pagination
-        activePage={page} // 현재페이지
-        itemsCountPerPage={10} // 한 페이지당 보여줄 아이템 개수
-        totalItemsCount={size} // 총 아이템 갯수
-        pageRangeDisplayed={5} // paginator 보여줄 범위
-        prevPageText={"‹"}
-        nextPageText={"›"}
-        onChange={(page) => setPage(page)}
-      />
+      {size !== 0 ? (
+        <Pagination
+          activePage={page} // 현재페이지
+          itemsCountPerPage={10} // 한 페이지당 보여줄 아이템 개수
+          totalItemsCount={size} // 총 아이템 갯수
+          pageRangeDisplayed={5} // paginator 보여줄 범위
+          prevPageText={"‹"}
+          nextPageText={"›"}
+          onChange={(page) => setPage(page)}
+        />
+      ) : (
+        <p style={{ marginTop: 30 }}>
+          There are no results matching the search term you entered.
+        </p>
+      )}
     </>
   );
 };
