@@ -78,7 +78,7 @@ const MovieDetail = () => {
           {selectedMovie?.id === trailer?.id && (
             <YouTube
               className={styles.youtube}
-              videoId={trailer?.results?.[0].key}
+              videoId={trailer?.results?.[0]?.key}
               opts={{
                 height: "390",
                 width: "640",
