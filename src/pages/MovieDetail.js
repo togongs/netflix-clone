@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-// import { movieAction } from "../redux/actions/movieAction";
 import ClipLoader from "react-spinners/ClipLoader";
 import { Tabs, Tab, Badge, Button, Modal } from "react-bootstrap";
 import YouTube from "react-youtube";

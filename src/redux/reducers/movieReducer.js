@@ -101,15 +101,28 @@ export const Trailer = createAsyncThunk(
   }
 );
 
-export const pagination = createAsyncThunk(
-  "movie/pagination",
+export const movieList = createAsyncThunk(
+  "movie/movieList",
   async (data, thunkAPI) => {
     const { page, size } = data;
     try {
       const popularMovieApi = await api.get(
         `/movie/popular?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&page=${page}&size=${size}`
       );
-      return thunkAPI.fulfillWithValue(popularMovieApi);
+      const genreApi = api.get(
+        `/genre/movie/list?api_key=${process.env.REACT_APP_API_KEY}&language=en-US`
+      );
+
+      let [popularMovies, genreList] = await Promise.all([
+        popularMovieApi,
+        genreApi,
+      ]);
+
+      let totalApi = {
+        popularMovies,
+        genreList,
+      };
+      return thunkAPI.fulfillWithValue(totalApi);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
@@ -155,7 +168,7 @@ const movieSlice = createSlice({
     movieTrailer(state, action) {
       state.trailer = action.payload.tailerApi.data;
     },
-    pagination(state, action) {
+    movieList(state, action) {
       state.popularMovies = action.payload.popularMovieApi.data;
     },
     search(state, action) {
@@ -214,27 +227,28 @@ const movieSlice = createSlice({
       state.error = action.payload; // catch 된 error 객체를 state.error에 넣습니다.
     },
 
-    [pagination.pending]: (state, action) => {
+    [movieList.pending]: (state, action) => {
       // console.log("pending 상태", action); // Promise가 pending일때 dispatch
     },
-    [pagination.fulfilled]: (state, action) => {
+    [movieList.fulfilled]: (state, action) => {
       // console.log("fulfilled 상태", action); // Promise가 fullfilled일 때 dispatch
-      state.popularMovies = action.payload.data;
+      state.popularMovies = action.payload.popularMovies.data;
+      state.genreList = action.payload.genreList.data.genres;
     },
-    [pagination.rejected]: (state, action) => {
+    [movieList.rejected]: (state, action) => {
       // console.log("rejected 상태", action); // Promise가 rejected일 때 dispatch
       state.error = action.payload; // catch 된 error 객체를 state.error에 넣습니다.
     },
 
     [search.pending]: (state, action) => {
-      console.log("search pending", action); // Promise가 pending일때 dispatch
+      // console.log("search pending", action); // Promise가 pending일때 dispatch
     },
     [search.fulfilled]: (state, action) => {
-      console.log("search fulfilled", action); // Promise가 fullfilled일 때 dispatch
+      // console.log("search fulfilled", action); // Promise가 fullfilled일 때 dispatch
       state.searchMovies = action.payload.data;
     },
     [search.rejected]: (state, action) => {
-      console.log("search rejected", action); // Promise가 rejected일 때 dispatch
+      // console.log("search rejected", action); // Promise가 rejected일 때 dispatch
       state.error = action.payload; // catch 된 error 객체를 state.error에 넣습니다.
     },
   },
