@@ -1,19 +1,21 @@
 /* eslint-disable jsx-a11y/img-redundant-alt */
 import React, { useState } from "react";
-import { Container, Form, Navbar, Nav, Button } from "react-bootstrap";
+import { Container, Form, Navbar, Nav } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
+import { IoSearchOutline } from "react-icons/io5";
 import styles from "./Navigation.module.scss";
 
 const Navigation = () => {
   const [search, setSearch] = useState("");
   const navigate = useNavigate();
   return (
-    <Navbar bg="dark" variant="dark" expand="lg">
-      <Container fluid>
+    <Navbar expand="lg">
+      <Container fluid style={{ padding: 0 }}>
         <Navbar.Brand href="#">
           <img
             className={styles.image}
-            width={100}
+            width={115}
+            height={70}
             src="https://content.surfit.io/thumbs/image/wJW2K/w4VbJ/10552564055eb8333117a06.png/cover-center-2x.webp"
             alt="image"
           />
@@ -33,7 +35,7 @@ const Navigation = () => {
             </Link>
           </Nav>
           <Form
-            className="d-flex"
+            className={styles.form}
             onSubmit={(e) => {
               e.preventDefault();
               navigate(`/movies?query=${search}`);
@@ -42,7 +44,7 @@ const Navigation = () => {
             <Form.Control
               type="text"
               placeholder="Search"
-              className="me-2"
+              className={styles.formControl}
               aria-label="Search"
               onKeyPress={(event) => {
                 const keyword = event.target.value;
@@ -54,14 +56,7 @@ const Navigation = () => {
               onChange={(event) => setSearch(event.target.value)}
               value={search}
             />
-            <Button
-              variant="outline-danger"
-              onClick={() => {
-                navigate(`/movies?query=${search}`);
-              }}
-            >
-              Search
-            </Button>
+            <IoSearchOutline className={styles.searchIcon} />
           </Form>
         </Navbar.Collapse>
       </Container>
