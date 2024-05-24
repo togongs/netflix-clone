@@ -26,7 +26,7 @@ const Home = () => {
   return (
     <div className={styles.container}>
       <Banner movie={popularMovies?.results?.[0]} />
-      <div>
+      <div className={styles.listContainer}>
         <h3>Popular Movie</h3>
         <MovieSlide movies={popularMovies} />
         <h3>Top rated Movie</h3>
